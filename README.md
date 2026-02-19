@@ -1,7 +1,3 @@
-# API Integrations - Currency Exchange
-
-Проект для получения и хранения курсов валют с автоматическим обновлением в PostgreSQL.
-
 ## Быстрый старт
 
 ### 1. Настройка .env файла
@@ -104,18 +100,3 @@ docker exec -it requests_db psql -U requests_user -d requests
 
 Параметры: `localhost:5432`, DB: `requests`, User: `requests_user`, Password: `12345`
 
-## Полезные команды
-
-```bash
-# Пересборка
-docker-compose build
-
-# Логи
-docker-compose logs -f
-
-# Перезапуск
-docker-compose restart app
-
-# Удаление с данными
-docker-compose down -v
-```
