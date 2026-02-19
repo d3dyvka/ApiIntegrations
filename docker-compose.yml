@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: requests_db
+    environment:
+      POSTGRES_DB: requests
+      POSTGRES_USER: requests_user
+      POSTGRES_PASSWORD: 12345
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U requests_user -d requests"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+
+  app:
+    build: .
+    container_name: currency_app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=requests
+      - DB_USER=requests_user
+      - DB_PASSWORD=12345
+    env_file:
+      - .env
+    volumes:
+      - ./logs.txt:/app/logs.txt
+    networks:
+      - app_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge
